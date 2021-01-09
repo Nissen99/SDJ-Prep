@@ -59,7 +59,7 @@ public class Time
 
   public boolean isBefore(Time time2){
 
-    if (convertToSeconds() > time2.convertToSeconds())
+    if (convertToSeconds() < time2.convertToSeconds())
     {
       return true;
     }
