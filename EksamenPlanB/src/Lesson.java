@@ -1,4 +1,3 @@
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,7 +11,7 @@ public class Lesson
   public Lesson(String topic, Date date, File[] resources, Time start, Time end)
   {
 
-    if (hasValidTime(start, end))
+    if (hasValidTime(start, end) && start != null )
     {
       this.date = date.copy();
       this.start = start.copy();
@@ -21,6 +20,24 @@ public class Lesson
       this.resources = new ArrayList<>();
       this.resources.addAll(Arrays.asList(resources));
     }
+
+  }
+
+
+  public ArrayList<SlideshowFile> getSlideSHowsSmallerThan(int count){
+
+    ArrayList<SlideshowFile> other = new ArrayList<>();
+
+    for (int i = 0; i < resources.size(); i++)
+    {
+      if (resources.get(i) instanceof SlideshowFile){
+        if (((SlideshowFile) resources.get(i)).getNumberOfSlides() < count){
+          other.add((SlideshowFile) resources.get(i));
+        }
+      }
+
+    }
+    return other;
 
   }
 
@@ -33,7 +50,7 @@ public class Lesson
   }
 
   public File[] getResources(){
-    File[] other = (File[]) resources.toArray();
+    File[] other = resources.toArray(new File[resources.size()]);
     return other;
   }
 
@@ -53,6 +70,7 @@ public class Lesson
     return start.timeTo(end);
   }
 
+
   public static boolean hasValidTime(Time start, Time end){
   Time validStartTime = new Time(8,20,0);
   Time validEndTime = new Time(21,15,0);
@@ -63,9 +81,11 @@ public class Lesson
     return true;
   }
 
+
+
   public void delayBy(int minutes){
 
-    if (minutes<=120)
+    if (minutes<=120 && minutes>=0)
     {
       Time startTester = new Time(start.convertToSeconds() + minutes * 60);
       Time endTester = new Time(end.convertToSeconds() + minutes * 60);
@@ -76,6 +96,7 @@ public class Lesson
         end = endTester;
       }
     }
+    else throw new IllegalArgumentException("Input must be between 0-120");
   }
 
 
@@ -84,20 +105,24 @@ public class Lesson
   public String getDateTimeString(){
 
     String[] dateString = date.toString().split("-");
+    String[] timeStartString = start.toString().split(":");
+    String[] timeEndString = end.toString().split(":");
+
 
     String dateStringFormat =  String.format("%02d", Integer.parseInt(dateString[0])) + "/" +
         String.format("%02d", Integer.parseInt(dateString[1])) + "/" +
         String.format("%02d",Integer.parseInt(dateString[2]));
 
-    String timeStartFormat = String.format("%02d", start.getHour()) + ":" +
-        String.format("%02d", start.getMinute()) + ":" +
-        String.format("%02d", start.getSecond());
+    String timeStartFormat = String.format("%02d", Integer.parseInt(timeStartString[0])) + ":" +
+        String.format("%02d", Integer.parseInt(timeStartString[1])) + ":" +
+        String.format("%02d", Integer.parseInt(timeStartString[2]));
 
-    String timeEndFormat = String.format("%02d", end.getHour()) + ":" +
-        String.format("%02d", end.getMinute()) + ":" +
-        String.format("%02d", end.getSecond());
+    String timeEndFormat = String.format("%02d", Integer.parseInt(timeEndString[0])) + ":" +
+        String.format("%02d", Integer.parseInt(timeEndString[1])) + ":" +
+        String.format("%02d", Integer.parseInt(timeEndString[2]));
 
     return dateStringFormat + " " + timeStartFormat + " - " + timeEndFormat;
+
 
   }
 
@@ -109,6 +134,7 @@ public class Lesson
     }
     return "Topic: " + topic + "\nWhen it is: " + getDateTimeString() + "\nResources are files: " + fileNames;
   }
+
 
 
 }

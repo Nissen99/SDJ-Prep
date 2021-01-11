@@ -19,7 +19,7 @@ public abstract class OnlineLesson extends Lesson
 
   public String toString(){
 
-    return super.toString() + "\nlesson will be on " + nameOfSoftware()+ "\nWas teacher screen sharing " + screenSharing;
+    return "\nlesson will be on " + nameOfSoftware()+ "\nWas teacher screen sharing " + screenSharing + "\n" + super.toString();
   }
 
 }

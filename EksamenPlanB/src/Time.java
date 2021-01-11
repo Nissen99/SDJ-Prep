@@ -5,14 +5,34 @@ public class Time
   private int second;
 
 
-
+//Overloading
   public Time(int h, int m, int s){
     this.hour = h;
-    this.minute = m;
+
+    if (m >= 60){
+      this.minute = m % 60;
+      this.hour += m / 60;
+    }
+    else
+    {
+      this.minute = m;
+    }
+    if (s >= 60){
+      this.second = s % 60;
+      this.minute += s / 60;
+      if (this.minute >= 60){
+        this.hour += m / 60;
+        this.minute = this.minute % 60;
+      }
+    }
+    else {
     this.second = s;
   }
 
+  }
 
+
+  //Overloading
   public Time(int totalTimeInSeconds){
 
     this.hour = totalTimeInSeconds / 3600;
@@ -57,13 +77,11 @@ public class Time
   }
 
 
-  public boolean isBefore(Time time2){
+  public boolean isBefore(Time time2)
+  {
 
-    if (convertToSeconds() < time2.convertToSeconds())
-    {
-      return true;
-    }
-    return false;
+    return (convertToSeconds() < time2.convertToSeconds());
+
   }
 
   public Time timeTo(Time time){
@@ -95,18 +113,5 @@ public class Time
     return hour + ":" + minute + ":" + second;
   }
 
-  public int getHour()
-  {
-    return hour;
-  }
 
-  public int getMinute()
-  {
-    return minute;
-  }
-
-  public int getSecond()
-  {
-    return second;
-  }
 }
